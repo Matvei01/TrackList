@@ -7,23 +7,64 @@
 
 import UIKit
 
+// MARK: - TrackListViewController
 final class TrackListViewController: UITableViewController {
-
+    
+    // MARK: - Private Properties
+    private var trackList = Track.getTrackList()
+    private let identifier = "trackName"
+    
+    // MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
     }
-
-    // MARK: - Table view data source
+    
+    // MARK: - Private Methods
+    private func setupView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: identifier)
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        title = "TrackList"
+    }
+    
+    // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 0
+        trackList.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         
-
+        let track = trackList[indexPath.row]
+        
+        var content = cell.defaultContentConfiguration()
+        content.text = track.song
+        content.secondaryText = track.artist
+        content.image = UIImage(named: track.title)
+        content.imageProperties.cornerRadius = tableView.rowHeight / 2
+        
+        cell.contentConfiguration = content
+        
         return cell
+    }
+    
+    // MARK: - UITableViewDelegate
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        80
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let track = trackList[indexPath.row]
+        
+        let trackDetailsVC = TrackDetailsViewController()
+        trackDetailsVC.track = track
+        
+        navigationController?.pushViewController(trackDetailsVC, animated: true)
     }
 }
