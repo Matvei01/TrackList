@@ -52,10 +52,18 @@ final class TrackDetailsViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .white
         view.addSubview(trackInfoStackView)
+        
+        setupNavigationBar()
+        
         setConstraints()
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
     }
 }
 
+// MARK: - Constraints
 private extension TrackDetailsViewController {
     func setConstraints() {
         NSLayoutConstraint.activate([
